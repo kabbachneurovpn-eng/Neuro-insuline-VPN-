@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neuro-Insulin | Active Terminal</title>
+    <style>
+        body { margin: 0; padding: 0; background-color: #000; overflow: hidden; font-family: 'Courier New', monospace; }
+        canvas { display: block; position: absolute; top: 0; left: 0; z-index: 1; }
+        .container {
+            position: relative; z-index: 10; color: #39ff14; text-align: center;
+            background: rgba(0, 0, 0, 0.85); padding: 30px; border: 2px solid #39ff14;
+            box-shadow: 0 0 30px #39ff14; max-width: 450px; margin: 5vh auto; border-radius: 5px;
+        }
+        h1 { text-transform: uppercase; letter-spacing: 5px; text-shadow: 0 0 10px #39ff14; margin: 10px 0; }
+        .status-box { font-size: 0.8rem; margin-bottom: 20px; border: 1px solid #39ff14; padding: 5px; background: rgba(0, 255, 0, 0.1); }
+        input {
+            background: transparent; border: 1px solid #39ff14; color: #39ff14;
+            padding: 10px; width: 80%; margin-bottom: 10px; outline: none; text-align: center;
+        }
+        .btn {
+            background: transparent; color: #39ff14; border: 1px solid #39ff14;
+            padding: 12px 25px; margin: 5px; cursor: pointer; font-weight: bold;
+            text-transform: uppercase; transition: 0.3s;
+        }
+        .btn:hover { background: #39ff14; color: #000; box-shadow: 0 0 20px #39ff14; }
+        #console-output {
+            margin-top: 15px; font-size: 0.7rem; color: #0f0; min-height: 40px;
+            text-align: left; padding: 10px; background: rgba(0,0,0,0.5); border: 1px dashed #39ff14;
+        }
+        footer { font-size: 0.7rem; margin-top: 20px; opacity: 0.7; }
+    </style>
+</head>
+<body>
+
+<canvas id="matrix"></canvas>
+
+<div class="container">
+    <div class="status-box" id="system-status">[ SYSTEME: EN ATTENTE ]</div>
+    <h1>NEURO-INSULIN</h1>
+    <p>Moteur de Recherche de Souveraineté</p>
+    
+    <input type="text" id="user-query" placeholder="Entrez les coordonnées ou l'idée...">
+    <br>
+    <button class="btn" onclick="startSearch()">SCANNER LE RÉSEAU</button>
+    <button class="btn" onclick="buyDose()">COMMANDER UNE DOSE</button>
+
+    <div id="console-output">> Prêt pour l'action...</div>
+    
+    <footer>
+        Fondateur: Mohamed Kabbach | Casablanca<br>
+        Terminal: Galaxy A40
+    </footer>
+</div>
+
+<script>
+    // --- تأثير الماتريكس ---
+    const canvas = document.getElementById('matrix');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+    const characters = "01ABCDEFGHIJKLMNOPQRSTUVWXYZ0@&*%";
+    const fontSize = 16;
+    const columns = canvas.width / fontSize;
+    const drops = Array(Math.floor(columns)).fill(1);
+    function drawMatrix() {
+        ctx.fillStyle = "rgba(0, 0, 0, 0.05)"; ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "#0F0"; ctx.font = fontSize + "px monospace";
+        for (let i = 0; i < drops.length; i++) {
+            const text = characters.charAt(Math.floor(Math.random() * characters.length));
+            ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+            if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+            drops[i]++;
+        }
+    }
+    setInterval(drawMatrix, 35);
+
+    // --- وظائف التفاعل الجديدة ---
+    const output = document.getElementById('console-output');
+    const status = document.getElementById('system-status');
+
+    function startSearch() {
+        const query = document.getElementById('user-query').value;
+        if (!query) {
+            output.innerText = "> ERREUR: Coordonnées manquantes.";
+            return;
+        }
+        status.innerText = "[ SYSTÈME: ANALYSE EN COURS... ]";
+        output.innerText = "> Connexion au serveur de Casablanca...\n> Scan des données pour: " + query + "...\n> Protection Neuro-Insulin activée.";
+        
+        setTimeout(() => {
+            output.innerText += "\n> RÉSULTAT: Aucun parasite mental détecté. Focus optimisé.";
+            status.innerText = "[ SYSTÈME: SÉCURISÉ ]";
+        }, 2000);
+    }
+
+    function buyDose() {
+        output.innerText = "> Initialisation du protocole de paiement...\n> Génération d'une Dose Digitale de Précision...\n> Redirection vers le coffre-fort Gumroad...";
+        setTimeout(() => {
+            alert("Redirection vers votre boutique Gumroad...");
+            // هنا يمكنك وضع رابط Gumroad الخاص بك لاحقاً
+            // window.location.href = "https://gumroad.com/yourstore";
+        }, 1500);
+    }
+</script>
+
+</body>
+</html>
