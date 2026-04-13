@@ -1,58 +1,39 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEURO-INSULIN SOUVERAINETÉ</title>
     <style>
-        body { margin: 0; background: #000; overflow: hidden; font-family: 'Courier New', monospace; }
-        canvas { display: block; position: absolute; top: 0; left: 0; z-index: 1; }
-        .interface { position: relative; z-index: 10; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; background: rgba(0,0,0,0.5); }
-        h1 { color: #0f0; font-size: 2rem; text-shadow: 0 0 20px #0f0; letter-spacing: 4px; }
-        .btn { background: rgba(0,20,0,0.8); color: #0f0; border: 2px solid #0f0; padding: 15px 30px; margin: 10px; width: 280px; font-weight: bold; cursor: pointer; box-shadow: 0 0 15px rgba(0,255,0,0.3); }
-        .console { border: 1px dashed #0f0; color: #0f0; padding: 15px; width: 85%; margin-top: 20px; font-size: 0.8rem; background: rgba(0,0,0,0.7); }
+        body { margin: 0; background: black; overflow: hidden; }
+        canvas { position: absolute; }
+        .content { position: relative; z-index: 5; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; font-family: sans-serif; }
+        .btn { background: black; color: #0f0; border: 2px solid #0f0; padding: 15px; width: 250px; margin: 10px; font-weight: bold; cursor: pointer; }
+        h1 { color: #0f0; text-shadow: 0 0 10px #0f0; }
     </style>
 </head>
 <body>
-    <canvas id="canvas"></canvas>
-    <div class="interface">
+    <canvas id="c"></canvas>
+    <div class="content">
         <h1>NEURO-INSULIN</h1>
-        <button class="btn" onclick="scan()">SCANNER LE RÉSEAU</button>
-        <button class="btn" onclick="dose()">COMMANDER UNE DOSE</button>
-        <div class="console" id="log">> STATUS: EN ATTENTE...</div>
+        <button class="btn">SCANNER LE RÉSEAU</button>
+        <button class="btn" onclick="location.href='https://gumroad.com/kabbach'">COMMANDER</button>
     </div>
     <script>
-        const canvas = document.getElementById('canvas');
-        const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-
-        const alphabet = "NEURO-INSULIN-FOCUS-KABBACH-VPN-SOUVERAINETE-01";
-        const fontSize = 16;
-        const columns = canvas.width / fontSize;
-        const rainDrops = Array.from({ length: columns }).fill(1);
-
+        const c = document.getElementById("c"), ctx = c.getContext("2d");
+        c.height = window.innerHeight; c.width = window.innerWidth;
+        const matrix = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789KABBACH";
+        const columns = c.width / 20; const drops = Array(Math.floor(columns)).fill(1);
         function draw() {
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = '#0f0';
-            ctx.font = fontSize + 'px monospace';
-            for (let i = 0; i < rainDrops.length; i++) {
-                const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
-                ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
-                if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                    rainDrops[i] = 0;
-                }
-                rainDrops[i]++;
-            }
+            ctx.fillStyle = "rgba(0, 0, 0, 0.05)"; ctx.fillRect(0, 0, c.width, c.height);
+            ctx.fillStyle = "#0f0"; ctx.font = "20px monospace";
+            drops.forEach((y, i) => {
+                const text = matrix[Math.floor(Math.random() * matrix.length)];
+                ctx.fillText(text, i * 20, y * 20);
+                if (y * 20 > c.height && Math.random() > 0.975) drops[i] = 0;
+                drops[i]++;
+            });
         }
-        setInterval(draw, 30);
-
-        function scan() { document.getElementById('log').innerText = "> SCAN EN COURS... SOUVERAINETÉ EN MARCHE"; }
-        function dose() { 
-            document.getElementById('log').innerText = "> EXTRACTION DE LA DOSE DIGITALE...";
-            setTimeout(() => { window.location.href = "https://gumroad.com/kabbach"; }, 1500);
-        }
+        setInterval(draw, 35);
     </script>
 </body>
 </html>
