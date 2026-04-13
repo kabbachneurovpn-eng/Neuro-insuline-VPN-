@@ -3,68 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEURO-INSULIN | Matrix</title>
+    <title>NEURO-INSULIN</title>
     <style>
-        body, html { margin: 0; padding: 0; background: black; color: #00ff00; font-family: monospace; overflow: hidden; height: 100%; }
-        #matrixCanvas { position: fixed; top: 0; left: 0; z-index: -1; }
-        .ui { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; text-align: center; background: rgba(0,0,0,0.7); }
-        .status { border: 1px solid #00ff00; padding: 5px; margin-bottom: 20px; animation: blink 2s infinite; font-size: 0.8rem; }
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-        h1 { font-size: 2.2rem; letter-spacing: 5px; text-shadow: 0 0 15px #00ff00; margin: 10px; }
-        .btn { background: transparent; color: #00ff00; border: 2px solid #00ff00; padding: 15px; width: 260px; cursor: pointer; text-transform: uppercase; font-weight: bold; margin: 10px; transition: 0.3s; }
-        .btn:hover { background: #00ff00; color: black; box-shadow: 0 0 20px #00ff00; }
-        .console { margin-top: 20px; padding: 10px; width: 85%; border: 1px dashed #00ff00; min-height: 60px; font-size: 0.75rem; background: rgba(0,20,0,0.4); }
+        body { margin: 0; background: black; overflow: hidden; font-family: monospace; }
+        canvas { position: absolute; top: 0; left: 0; }
+        .ui { position: relative; z-index: 10; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; background: rgba(0,0,0,0.6); }
+        .btn { background: transparent; color: #0f0; border: 2px solid #0f0; padding: 15px; width: 280px; margin: 10px; cursor: pointer; font-weight: bold; text-shadow: 0 0 5px #0f0; box-shadow: 0 0 10px rgba(0,255,0,0.2); }
+        h1 { color: #0f0; letter-spacing: 5px; text-shadow: 0 0 15px #0f0; }
+        .console { border: 1px dashed #0f0; color: #0f0; padding: 10px; width: 80%; min-height: 50px; font-size: 0.8rem; margin-top: 20px; }
     </style>
 </head>
 <body>
-<canvas id="matrixCanvas"></canvas>
-<div class="ui">
-    <div class="status" id="st">[ SYSTEME: ACTIF ]</div>
-    <h1>NEURO-INSULIN</h1>
-    <button class="btn" onclick="sc()">SCANNER LE RÉSEAU</button>
-    <button class="btn" onclick="ds()">COMMANDER UNE DOSE</button>
-    <div class="console" id="log">> Prêt pour la souveraineté...</div>
-</div>
-<script>
-    const c = document.getElementById('matrixCanvas');
-    const x = c.getContext('2d');
-    function resize() { c.width = window.innerWidth; c.height = window.innerHeight; }
-    window.onresize = resize; resize();
-
-    // كلمات مشروعك التي ستتساقط في الخلفية
-    const words = ["NEURO", "INSULIN", "VPN", "FOCUS", "SOUVERAINETÉ", "01", "KABBACH", "GALAXY-A40", "TERMUX", "BIO-HACK"];
-    const f = 20;
-    const col = c.width / f;
-    const d = Array(Math.floor(col)).fill(1);
-
-    function dr() {
-        x.fillStyle = "rgba(0, 0, 0, 0.15)";
-        x.fillRect(0, 0, c.width, c.height);
-        x.fillStyle = "#0F0";
-        x.font = f + "px monospace";
-        d.forEach((y, i) => {
-            // اختيار كلمة عشوائية بدلاً من مجرد أرقام
-            const txt = words[Math.floor(Math.random() * words.length)];
-            x.fillText(txt, i * f * 4, y * f); // ضربنا في 4 لترك مسافة للكلمات
-            if (y * f > c.height && Math.random() > 0.975) d[i] = 0;
-            d[i]++;
-        });
-    }
-    setInterval(dr, 50);
-
-    const l = document.getElementById('log');
-    const s = document.getElementById('st');
-    function sc() {
-        s.innerText = "[ SCANNING... ]"; let p = 0;
-        let i = setInterval(() => {
-            p += 10; l.innerText = `> Analyse des neurones... ${p}%`;
-            if(p >= 100) { clearInterval(i); l.innerText = "> Scan terminé. Focus stabilisé."; s.innerText = "[ PRET ]"; }
-        }, 150);
-    }
-    function ds() {
-        l.innerText = "> جاري استخراج الجرعة الرقمية... يرجى الانتظار";
-        setTimeout(() => { window.location.href = "https://gumroad.com/kabbach"; }, 2000);
-    }
-</script>
+    <canvas id="m"></canvas>
+    <div class="ui">
+        <h1 id="header">NEURO-INSULIN</h1>
+        <button class="btn" onclick="sc()">SCANNER LE RÉSEAU</button>
+        <button class="btn" onclick="ds()">COMMANDER UNE DOSE</button>
+        <div class="console" id="log">> Système prêt...</div>
+    </div>
+    <script>
+        const c = document.getElementById('m'), x = c.getContext('2d');
+        c.width = window.innerWidth; c.height = window.innerHeight;
+        const words = "NEURO INSULIN VPN FOCUS KABBACH 01 TERMUX GALAXY".split(" ");
+        const f = 16, columns = c.width / f, drops = Array(Math.floor(columns)).fill(1);
+        function draw() {
+            x.fillStyle = "rgba(0, 0, 0, 0.05)"; x.fillRect(0, 0, c.width, c.height);
+            x.fillStyle = "#0f0"; x.font = f + "px monospace";
+            drops.forEach((y, i) => {
+                const txt = words[Math.floor(Math.random() * words.length)];
+                x.fillText(txt, i * f * 3, y * f);
+                if (y * f > c.height && Math.random() > 0.975) drops[i] = 0;
+                drops[i]++;
+            });
+        }
+        setInterval(draw, 50);
+        function sc() { 
+            const l = document.getElementById('log'); 
+            l.innerText = "> Analysing Digital Nodes...";
+            setTimeout(() => { l.innerText = "> Secure Tunnel Established."; }, 1500);
+        }
+        function ds() {
+            document.getElementById('log').innerText = "> Extraction de la Dose...";
+            setTimeout(() => { window.location.href = "https://gumroad.com/kabbach"; }, 1500);
+        }
+    </script>
 </body>
 </html>
