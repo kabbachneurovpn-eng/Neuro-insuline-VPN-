@@ -50,7 +50,7 @@
             if(p >= 100) { clearInterval(i); l.innerText = "> Scan terminé. Focus stabilisé."; s.innerText = "[ PRET ]"; }
         }, 100);
     }
-    function ds() {
+    function ds() { const l = document.getElementById("log"); l.innerText = "> جاري استخراج الجرعة الرقمية... يرجى الانتظار"; setTimeout(() => { window.location.href = "https://gumroad.com/kabbach"; }, 2000); }
         l.innerText = "> Préparation de la dose...";
         setTimeout(() => { l.innerText = "> Dose envoyée. Concentration active."; }, 1500);
     }
