@@ -3,47 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEURO-INSULIN</title>
+    <title>NEURO-INSULIN SOUVERAINETÉ</title>
     <style>
-        body { margin: 0; background: black; overflow: hidden; font-family: monospace; }
-        canvas { position: absolute; top: 0; left: 0; }
-        .ui { position: relative; z-index: 10; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; background: rgba(0,0,0,0.6); }
-        .btn { background: transparent; color: #0f0; border: 2px solid #0f0; padding: 15px; width: 280px; margin: 10px; cursor: pointer; font-weight: bold; text-shadow: 0 0 5px #0f0; box-shadow: 0 0 10px rgba(0,255,0,0.2); }
-        h1 { color: #0f0; letter-spacing: 5px; text-shadow: 0 0 15px #0f0; }
-        .console { border: 1px dashed #0f0; color: #0f0; padding: 10px; width: 80%; min-height: 50px; font-size: 0.8rem; margin-top: 20px; }
+        body { margin: 0; background: #000; overflow: hidden; font-family: 'Courier New', monospace; }
+        canvas { display: block; position: absolute; top: 0; left: 0; z-index: 1; }
+        .interface { position: relative; z-index: 10; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; background: rgba(0,0,0,0.5); }
+        h1 { color: #0f0; font-size: 2rem; text-shadow: 0 0 20px #0f0; letter-spacing: 4px; }
+        .btn { background: rgba(0,20,0,0.8); color: #0f0; border: 2px solid #0f0; padding: 15px 30px; margin: 10px; width: 280px; font-weight: bold; cursor: pointer; box-shadow: 0 0 15px rgba(0,255,0,0.3); }
+        .console { border: 1px dashed #0f0; color: #0f0; padding: 15px; width: 85%; margin-top: 20px; font-size: 0.8rem; background: rgba(0,0,0,0.7); }
     </style>
 </head>
 <body>
-    <canvas id="m"></canvas>
-    <div class="ui">
-        <h1 id="header">NEURO-INSULIN</h1>
-        <button class="btn" onclick="sc()">SCANNER LE RÉSEAU</button>
-        <button class="btn" onclick="ds()">COMMANDER UNE DOSE</button>
-        <div class="console" id="log">> Système prêt...</div>
+    <canvas id="canvas"></canvas>
+    <div class="interface">
+        <h1>NEURO-INSULIN</h1>
+        <button class="btn" onclick="scan()">SCANNER LE RÉSEAU</button>
+        <button class="btn" onclick="dose()">COMMANDER UNE DOSE</button>
+        <div class="console" id="log">> STATUS: EN ATTENTE...</div>
     </div>
     <script>
-        const c = document.getElementById('m'), x = c.getContext('2d');
-        c.width = window.innerWidth; c.height = window.innerHeight;
-        const words = "NEURO INSULIN VPN FOCUS KABBACH 01 TERMUX GALAXY".split(" ");
-        const f = 16, columns = c.width / f, drops = Array(Math.floor(columns)).fill(1);
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const alphabet = "NEURO-INSULIN-FOCUS-KABBACH-VPN-SOUVERAINETE-01";
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+        const rainDrops = Array.from({ length: columns }).fill(1);
+
         function draw() {
-            x.fillStyle = "rgba(0, 0, 0, 0.05)"; x.fillRect(0, 0, c.width, c.height);
-            x.fillStyle = "#0f0"; x.font = f + "px monospace";
-            drops.forEach((y, i) => {
-                const txt = words[Math.floor(Math.random() * words.length)];
-                x.fillText(txt, i * f * 3, y * f);
-                if (y * f > c.height && Math.random() > 0.975) drops[i] = 0;
-                drops[i]++;
-            });
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#0f0';
+            ctx.font = fontSize + 'px monospace';
+            for (let i = 0; i < rainDrops.length; i++) {
+                const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+                ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
+                if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    rainDrops[i] = 0;
+                }
+                rainDrops[i]++;
+            }
         }
-        setInterval(draw, 50);
-        function sc() { 
-            const l = document.getElementById('log'); 
-            l.innerText = "> Analysing Digital Nodes...";
-            setTimeout(() => { l.innerText = "> Secure Tunnel Established."; }, 1500);
-        }
-        function ds() {
-            document.getElementById('log').innerText = "> Extraction de la Dose...";
+        setInterval(draw, 30);
+
+        function scan() { document.getElementById('log').innerText = "> SCAN EN COURS... SOUVERAINETÉ EN MARCHE"; }
+        function dose() { 
+            document.getElementById('log').innerText = "> EXTRACTION DE LA DOSE DIGITALE...";
             setTimeout(() => { window.location.href = "https://gumroad.com/kabbach"; }, 1500);
         }
     </script>
